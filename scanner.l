@@ -1,7 +1,7 @@
 %{
     #include "tokens.h"
     #include "hash.h"
-    int isRunning = 1;
+    int running = 1;
     int lineNumber = 0;
 %}
 
@@ -67,5 +67,5 @@ int getLineNumber(void) {
 }
 
 int isRunning(void) {
-    return isRunning;
+    return running;
 }

@@ -3,13 +3,13 @@
 #include <string.h>
 #include "hash.h"
 
-HASH_NODE *Table[HASH_SIZE]
+HASH_NODE *Table[HASH_SIZE];
 
 void HashInit(void) {
-    for(int i=0; i<HASH_SIZE; i++) table[i]=NULL;
+    for(int i=0; i<HASH_SIZE; i++) Table[i]=NULL;
 }
 
-int hashAddres(char *text) {
+int hashAddress(char *text) {
     int address = 1;
     for(int i=0; i<strlen(text); i++) {
         address = (address * text[i]) % HASH_SIZE + 1;
@@ -19,7 +19,7 @@ int hashAddres(char *text) {
 
 HASH_NODE *hashFind(char *text) {
     HASH_NODE *node;
-    int address = hashAddres(text);
+    int address = hashAddress(text);
     for(node=Table[address]; node; node = node->next) {
         if (strcmp(node->text, text) == 0) return node;
     }
