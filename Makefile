@@ -14,3 +14,8 @@ lex.yy.c: scanner.l
 
 clean:
 	rm lex.yy.c etapa1
+
+test: lex.yy.c
+	gcc -o etapa1 lex.yy.c
+	chmod +x etapa1
+	./etapa1 test.txt
