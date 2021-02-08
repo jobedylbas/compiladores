@@ -38,7 +38,7 @@
 \'([^'\\\n]?|\\.)\'                                     {hashInsert(yytext, LIT_CHAR); return LIT_CHAR;}
 \"([^\"\\\n]|\\.)*\"                                    {hashInsert(yytext, LIT_STRING); return LIT_STRING;}
 
-[v\,\;\:\(\)\[\]\{\}\+\-\*\/\<\>\=\.\~\&\$\#]           {return yytext[0];}
+[\,\;\:\(\)\[\]\{\}\+\-\*\/\<\>\=\.\~\&\$\#]            {return yytext[0];}
 [ \t]
 
 "\n"                                                    {lineNumber++;}
@@ -59,6 +59,7 @@
 
 
 int yywrap() {
+    running = 0;
     return 1;
 }
 
