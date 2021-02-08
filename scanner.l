@@ -31,14 +31,20 @@
 "!="                                                    {return OPERATOR_DIF;}
 "<-"                                                    {return LEFT_ASSIGN;}
 "->"                                                    {return RIGHT_ASSIGN;}
-[A-Za-z_][A-Za-z_0-9]*                                  {hashInsert(yytext, TK_IDENTIFIER); return TK_IDENTIFIER;}
 
-[0-9]*                                                  {hashInsert(yytext, LIT_INTEGER); return LIT_INTEGER;}
+\'([^\"\\\n]|\\.){1}\'                                  {hashInsert(yytext, LIT_CHAR); return LIT_CHAR;}
+\'([^'\\\n]?|\\.)*\'                                    {return TOKEN_ERROR;} 
 
-\'([^'\\\n]?|\\.)\'                                     {hashInsert(yytext, LIT_CHAR); return LIT_CHAR;}
 \"([^\"\\\n]|\\.)*\"                                    {hashInsert(yytext, LIT_STRING); return LIT_STRING;}
 
-[\,\;\:\(\)\[\]\{\}\+\-\*\/\<\>\=\.\~\&\$\#]            {return yytext[0];}
+[\,\;\:\(\)\[\]\{\}\+\-\*\/\<\>\=\.\~\&\$\#\|]          {return yytext[0];}
+
+[0-9]+                                                  {hashInsert(yytext, LIT_INTEGER); return LIT_INTEGER;}
+
+[A-Za-z_][A-Za-z_0-9]*                                  {hashInsert(yytext, TK_IDENTIFIER); return TK_IDENTIFIER;}
+
+[0-9][A-Za-z_]*                                         {return TOKEN_ERROR;} 
+
 [ \t]
 
 "\n"                                                    {lineNumber++;}
@@ -46,7 +52,7 @@
 "//".*
 "/*"                                                    {BEGIN(COMMENT);}
 
-.                                                       {return TOKEN_ERROR;}
+.                                                       {return TOKEN_ERROR;}                                
 
 <COMMENT>"*/"                                           {BEGIN(INITIAL);}
 <COMMENT>"\n"                                           {lineNumber++;}
@@ -56,6 +62,7 @@
 
 #include "hash.c"
 #include "main.c"
+// #include "main_prof.c"
 
 
 int yywrap() {
@@ -69,4 +76,8 @@ int getLineNumber(void) {
 
 int isRunning(void) {
     return running;
+}
+
+void initMe(void) {
+
 }
