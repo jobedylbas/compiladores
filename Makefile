@@ -13,9 +13,15 @@ lex.yy.c: scanner.l
 	lex scanner.l
 
 clean:
-	rm lex.yy.c etapa1
+	rm -rf lex.yy.c etapa1 || true
 
 test: lex.yy.c
 	gcc -o etapa1 lex.yy.c
 	chmod +x etapa1
 	./etapa1 test.txt
+
+compress: clean
+	mkdir etapa1
+	cp hash.c hash.h main.c Makefile scanner.l test.txt tokens.h ./etapa1
+	tar cvzf etapa1.tar ./etapa1 
+	rm -r etapa1
