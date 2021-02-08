@@ -1,6 +1,7 @@
 char
 int
 bool
+pointer
 if
 then
 else
@@ -14,10 +15,10 @@ return
 !=
 <-
 ->
-id
+i
+42
 true
 false
-42
 'c'
 "string"
 
@@ -62,3 +63,5 @@ quebrada"
 "<="
 "42"
 "true"
+
+int d <- ba'
