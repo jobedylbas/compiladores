@@ -23,5 +23,5 @@ test: lex.yy.c
 compress: clean
 	mkdir etapa1
 	cp hash.c hash.h main.c Makefile scanner.l test.txt tokens.h ./etapa1
-	tar cvzf etapa1.tar ./etapa1 
+	tar czf etapa1.tgz ./etapa1 
 	rm -r etapa1
