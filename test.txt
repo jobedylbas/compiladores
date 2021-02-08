@@ -1,0 +1,64 @@
+char
+int
+bool
+if
+then
+else
+while
+read
+print
+return
+<=
+>=
+==
+!=
+<-
+->
+id
+true
+false
+42
+'c'
+"string"
+
+// This is a comment
+
+/*  Multiple line
+    Comment
+*/
+
+int id2 <- 42
+char id <- 'c'
+str <- "simple str"
+"\'simple quote\'"
+"\"double quote\""
+"error""
+
+, ; : ( ) [ ] { } + - * / < > | & ~ $ # 
+
+'@'
+
+_id
+
+12A5B
+`
+"
+'
+@
+'nc'
+'not correct'
+'a
+a'
+ab'
+
+"string\nquebra de linha"
+
+"string
+quebrada"
+
+"uma \" string"
+"duas" "strings"
+"@"
+"<="
+"42"
+"true"
