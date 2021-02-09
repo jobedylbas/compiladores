@@ -32,7 +32,7 @@
 "<-"                                                    {return LEFT_ASSIGN;}
 "->"                                                    {return RIGHT_ASSIGN;}
 
-\'([^\"\\\n]|\\.){1}\'                                  {hashInsert(yytext, LIT_CHAR); return LIT_CHAR;}
+\'([^\"\\\n]|\\.)\'                                     {hashInsert(yytext, LIT_CHAR); return LIT_CHAR;}
 \'([^'\\\n]?|\\.)*\'                                    {return TOKEN_ERROR;} 
 
 \"([^\"\\\n]|\\.)*\"                                    {hashInsert(yytext, LIT_STRING); return LIT_STRING;}
