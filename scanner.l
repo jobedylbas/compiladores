@@ -43,8 +43,6 @@
 
 [A-Za-z_][A-Za-z_0-9]*                                  {hashInsert(yytext, TK_IDENTIFIER); return TK_IDENTIFIER;}
 
-[0-9][A-Za-z_]*                                         {return TOKEN_ERROR;} 
-
 [ \t]
 
 "\n"                                                    {lineNumber++;}
