@@ -13,7 +13,7 @@ lex.yy.c: scanner.l
 	lex scanner.l
 
 clean:
-	rm -rf lex.yy.c etapa1 || true
+	rm -rf lex.yy.c etapa1 etapa1.tgz
 
 test: lex.yy.c
 	gcc -o etapa1 lex.yy.c
