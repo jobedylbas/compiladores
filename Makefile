@@ -1,5 +1,5 @@
 #
-# UFRGS - Compiladores B - Marcelo Johann - 2009/2 - Etapa 1
+# UFRGS - Compiladores B - Jobe Diego Dylbas dos Santos- 2020/2 - Etapa 1
 #
 # Makefile for single compiler call
 # All source files must be included from code embedded in scanner.l
@@ -21,7 +21,4 @@ test: lex.yy.c
 	./etapa1 test.txt
 
 compress: clean
-	mkdir etapa1
-	cp hash.c hash.h main.c Makefile scanner.l test.txt tokens.h ./etapa1
-	tar czf etapa1.tgz ./etapa1 
-	rm -r etapa1
+	tar cvzf etapa1.tgz hash.c hash.h main.c Makefile scanner.l test.txt tokens.h
