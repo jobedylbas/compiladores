@@ -3,6 +3,7 @@
     #include "hash.h"
     int running = 1;
     int lineNumber = 0;
+    int getLineNumber() { return lineNumber; }
 %}
 
 %x COMMENT
@@ -58,6 +59,7 @@
 
 %%
 
+#include "y.tab.c"
 #include "hash.c"
 #include "main.c"
 // #include "main_prof.c"
@@ -66,10 +68,6 @@
 int yywrap() {
     running = 0;
     return 1;
-}
-
-int getLineNumber(void) {
-    return lineNumber;
 }
 
 int isRunning(void) {

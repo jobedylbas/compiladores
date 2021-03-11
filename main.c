@@ -59,13 +59,10 @@ int main(int argc, char **argv) {
     // Error if file doesn't exist
     if (yyin == NULL) {
         fprintf(stderr, "Failed to openfile: %s.\n", argv[1]);
-        exit(1);
+        exit(2);
     }
 
-    printf("line\ttoken\t\tinserted\ttext\n");
-    while(isRunning()) {
-        token = yylex();
-        printf("%d\t%s\t\t%d\t%s\n", getLineNumber(), getTokenName(token), tokenInHash(token), yytext );   
-    }
+    yyparse();  
+    printf("Passed!\n");
     exit(0);
 }
