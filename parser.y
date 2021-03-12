@@ -95,7 +95,7 @@ funcParamList: headParamList tailParamList
     |
     ;
 
-tailParamList: ','  funcParamList
+tailParamList: ',' headParamList funcParamList
     |
     ;
 
