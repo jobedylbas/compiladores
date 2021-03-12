@@ -102,13 +102,10 @@ tailParamList: ','  funcParamList
 headParamList: type TK_IDENTIFIER
     ;
 
-cmdBlock: '{' cmdList '}'
+cmdBlock: '{' cmdList '};'
     ;
 
-cmdList: cmd tailCmdList
-    ;
-
-tailCmdList: ';' cmd tailCmdList
+cmdList: cmd ';' cmdList
     |
     ;
 
