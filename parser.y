@@ -78,13 +78,8 @@ attr: TK_IDENTIFIER LEFT_ASSIGN expr
     ;
 
 flowControl: KW_IF '(' expr ')' KW_THEN cmd
-    | KW_IF '(' expr ')' KW_THEN cmdBlock
     | KW_IF '(' expr ')' KW_THEN cmd KW_ELSE cmd
-    | KW_IF '(' expr ')' KW_THEN cmdBlock KW_ELSE cmdBlock
-    | KW_IF '(' expr ')' KW_THEN cmdBlock KW_ELSE cmd
-    | KW_IF '(' expr ')' KW_THEN cmd KW_ELSE cmdBlock
     | KW_WHILE '(' expr ')' cmd
-    | KW_WHILE '(' expr ')' cmdBlock
     ;
 
 return: KW_RETURN expr
