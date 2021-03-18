@@ -1,6 +1,8 @@
 %{
-    #include "y.tab.h"
     #include "hash.h"
+    #include "ast.h"
+    #include "y.tab.h"
+
     int running = 1;
     int lineNumber = 0;
     int getLineNumber() { return lineNumber; }
@@ -33,16 +35,16 @@
 "<-"                                                    {return LEFT_ASSIGN;}
 "->"                                                    {return RIGHT_ASSIGN;}
 
-\'([^\"\\\n]|\\.)\'                                     {hashInsert(yytext, LIT_CHAR); return LIT_CHAR;}
+\'([^\"\\\n]|\\.)\'                                     {yylval.symbol = hashInsert(yytext, LIT_CHAR); return LIT_CHAR;}
 \'([^'\\\n]?|\\.)*\'                                    {return TOKEN_ERROR;} 
 
-\"([^\"\\\n]|\\.)*\"                                    {hashInsert(yytext, LIT_STRING); return LIT_STRING;}
+\"([^\"\\\n]|\\.)*\"                                    {yylval.symbol = hashInsert(yytext, LIT_STRING); return LIT_STRING;}
 
 [\,\;\:\(\)\[\]\{\}\+\-\*\/\<\>\=\.\~\&\$\#\|]          {return yytext[0];}
 
-[0-9]+                                                  {hashInsert(yytext, LIT_INTEGER); return LIT_INTEGER;}
+[0-9]+                                                  {yylval.symbol = hashInsert(yytext, LIT_INTEGER); return LIT_INTEGER;}
 
-[A-Za-z_][A-Za-z_0-9]*                                  {hashInsert(yytext, TK_IDENTIFIER); return TK_IDENTIFIER;}
+[A-Za-z_][A-Za-z_0-9]*                                  {yylval.symbol = hashInsert(yytext, TK_IDENTIFIER); return TK_IDENTIFIER;}
 
 [ \t]
 
@@ -62,6 +64,7 @@
 #include "y.tab.c"
 #include "hash.c"
 #include "main.c"
+#include "ast.c"
 // #include "main_prof.c"
 
 
