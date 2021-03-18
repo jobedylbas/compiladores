@@ -62,7 +62,8 @@ int main(int argc, char **argv) {
         exit(2);
     }
 
-    yyparse();  
+    yyparse();
+      
     printf("Passed!\n");
     exit(0);
 }

@@ -79,9 +79,9 @@ decList: dec ';' decList                                            {$$ = astCre
     |                                                               {$$ = 0;}
     ;
 
-dec: decGlobalVariable                                              {$$ = astCreate(T_AST_DECVAL, 0, $1, 0, 0, 0);}
-    | func                                                          {$$ = astCreate(T_AST_DECFUNC, 0, $1, 0, 0, 0);}
-    | cmd                                                           {$$ = astCreate(T_AST_DECCMD, 0, $1, 0, 0, 0);}
+dec: decGlobalVariable                                              
+    | func                                                          
+    | cmd                                                           
     ;
 
 decGlobalVariable: type TK_IDENTIFIER ':' literal                   {$$ = astCreate(T_AST_DECGLOBALVAL, $2, $1, $4, 0, 0);}
@@ -89,7 +89,7 @@ decGlobalVariable: type TK_IDENTIFIER ':' literal                   {$$ = astCre
     ;
 
 decGlobalVector: type '[' LIT_INTEGER ']' TK_IDENTIFIER             {$$ = astCreate(T_AST_DECVEC, $5, $1, 0, 0, 0);}
-    | type  '[' LIT_INTEGER ']' TK_IDENTIFIER ':' vectorValueList   {$$ = astCreate(T_AST_DECGLOBALVECWITHVALUE, 0, $1, 0, 0, 0);}
+    | type  '[' LIT_INTEGER ']' TK_IDENTIFIER ':' vectorValueList   {$$ = astCreate(T_AST_DECGLOBALVECWITHVALUE, 0, $1, $7, 0, 0);}
     ;
 
 vectorValueList: literal vectorValueList                            {$$ = astCreate(T_AST_VECVALLIST, 0, $1, $2, 0, 0);}
@@ -119,7 +119,7 @@ return: KW_RETURN expr                                              {$$ = astCre
 read: KW_READ TK_IDENTIFIER                                         {$$ = astCreate(T_AST_READ, $2, 0, 0, 0, 0);}
     ;
 
-func: type TK_IDENTIFIER '(' funcParamList ')' cmdBlock
+func: type TK_IDENTIFIER '(' funcParamList ')' cmdBlock             {$$ = astCreate(T_AST_FUNC, $2, $1, $4, $6, 0);}
     ;
 
 funcParamList: headParamList tailParamList                          {$$ = astCreate(T_AST_FUNCPARAMLIST, 0, $1, $2, 0, 0);}
@@ -192,10 +192,10 @@ tailArgList: ',' expr tailArgList                                   {$$ = astCre
     |                                                               {$$ = 0;}
     ;
 
-type: KW_CHAR                                                       {$$ = astCreate(T_AST_SYMBOL, 0, 0, 0, 0, 0);}
-    | KW_INT                                                        {$$ = astCreate(T_AST_SYMBOL, 0, 0, 0, 0, 0);}
-    | KW_BOOL                                                       {$$ = astCreate(T_AST_SYMBOL, 0, 0, 0, 0, 0);}
-    | KW_POINTER                                                    {$$ = astCreate(T_AST_SYMBOL, 0, 0, 0, 0, 0);}
+type: KW_CHAR                                                       {$$ = astCreate(T_AST_KWCHAR, 0, 0, 0, 0, 0);}
+    | KW_INT                                                        {$$ = astCreate(T_AST_KWINT, 0, 0, 0, 0, 0);}
+    | KW_BOOL                                                       {$$ = astCreate(T_AST_KWBOOL, 0, 0, 0, 0, 0);}
+    | KW_POINTER                                                    {$$ = astCreate(T_AST_KWPOINTER, 0, 0, 0, 0, 0);}
     ;
 
 %%

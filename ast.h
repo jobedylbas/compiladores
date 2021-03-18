@@ -61,7 +61,11 @@
 #define T_AST_FUNCTIONCALLER 53
 #define T_AST_ARGLIST 54
 #define T_AST_TAILARGLIST 55
-
+#define T_AST_KWCHAR 56
+#define T_AST_KWINT 57
+#define T_AST_KWBOOL 58
+#define T_AST_KWPOINTER 59
+#define T_AST_FUNC 60
 typedef struct ast_struct {
     int type;
     HASH_NODE *symbol;
