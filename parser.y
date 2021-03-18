@@ -72,7 +72,7 @@ int yyerror();
 
 %%
 
-program: decList                                                    
+program: decList                                                    {astPrint($1, 0);}                               
     ;
 
 decList: dec ';' decList                                            {$$ = astCreate(T_AST_DEC, 0, $1, $3, 0, 0);}
