@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "ast.h"
+
+extern AST_NODE* getAST();
 
 int isRunning(void);
 int getLineNumber(void);
@@ -48,9 +51,10 @@ int tokenInHash(int token) {
 int main(int argc, char **argv) {
     int token, inserted;
     char *tokenName;
+    FILE *output;
     // Error if no file is passed when executing the program
-    if (argc < 2) {
-        fprintf(stderr, "Call: ./etapa1 file_name\n");
+    if (argc < 3) {
+        fprintf(stderr, "Call: ./etapa1 file_name file_name2\n");
         exit(1);
     }
 
@@ -62,8 +66,17 @@ int main(int argc, char **argv) {
         exit(2);
     }
 
+    output = fopen(argv[2], "w+");
+    if (output == NULL) {
+        fprintf(stderr, "Failed to openfile: %s.\n", argv[2]);
+        exit(2);
+    }
+
     yyparse();
       
     printf("Passed!\n");
+
+    astUncompile(getAST(), output);
+
     exit(0);
 }

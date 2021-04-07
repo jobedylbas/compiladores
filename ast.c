@@ -87,7 +87,9 @@ void astPrint(AST_NODE *node, int level) {
         fprintf(stderr, " ");
     }
 
-    fprintf(stderr, "AST(");
+    if(level == 0) {
+        fprintf(stderr, "AST(\n");
+    }
 
     description(node->type);
 
@@ -99,5 +101,277 @@ void astPrint(AST_NODE *node, int level) {
 
     for(int i=0; i<MAX_SONS; ++i) {
         astPrint(node->son[i], level+1);
+    }
+}
+
+void astUncompile(AST_NODE *node, FILE *file) {
+    if(!node) {
+        return;
+    }
+
+    switch (node->type)
+    {
+        case T_AST_DEC: 
+            astUncompile(node->son[0], file);
+            fprintf(file, ";\n");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_DECVAL: 
+            break;
+        case T_AST_DECFUNC: 
+            break;
+        case T_AST_DECCMD: 
+            break;
+        case T_AST_DECGLOBALVAL:
+            astUncompile(node->son[0], file);
+            fprintf(file, " %s :", node->symbol->text);
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_DECGLOBALVEC: 
+            astUncompile(node->son[0], file);
+            break;
+        case T_AST_DECVEC: 
+            astUncompile(node->son[0], file);
+            fprintf(file, "[" );
+            astUncompile(node->son[1], file);
+            fprintf(file,"] %s", node->symbol->text);
+            break;
+        case T_AST_DECGLOBALVECWITHVALUE: 
+            astUncompile(node->son[0], file);
+            fprintf(file, "[ ");
+            astUncompile(node->son[2], file);
+            fprintf(file, "] %s :", node->symbol->text);
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_VECVALLIST: 
+            astUncompile(node->son[0], file);
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_SYMBOL: 
+            fprintf(file, " %s ", node->symbol->text);
+            break;
+        case T_AST_LASSIGN:
+            fprintf(file, " %s <- ", node->symbol->text);
+            astUncompile(node->son[0], file);
+            break;
+        case T_AST_RASSIGN: 
+            astUncompile(node->son[0], file);
+            fprintf(file, " -> %s", node->symbol->text);
+            break;
+        case T_AST_LASSIGNEXP:
+            fprintf(file, "%s [", node->symbol->text);
+            astUncompile(node->son[0], file);
+            fprintf(file, "] <- ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_RASSIGNREXP: 
+            astUncompile(node->son[0], file);
+            fprintf(file, " <- %s [", node->symbol->text);
+            astUncompile(node->son[1], file);
+            fprintf(file, "]");
+            break;
+        case T_AST_IFTHEN: 
+            fprintf(file, "if (");
+            astUncompile(node->son[0], file);
+            fprintf(file, ") then ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_IFTHENELSE:
+            fprintf(file, "if (");
+            astUncompile(node->son[0], file);
+            fprintf(file, ") then ");
+            astUncompile(node->son[1], file);
+            fprintf(file, "else ");
+            astUncompile(node->son[2], file);
+            break;
+        case T_AST_WHILE:
+            fprintf(file, "while (");
+            astUncompile(node->son[0], file);
+            fprintf(file, ") ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_RETURN:
+            fprintf(file, "return ");
+            astUncompile(node->son[0], file);
+            break;
+        case T_AST_READ: 
+            fprintf(file, "read %s", node->symbol->text);
+            break;
+        case T_AST_FUNCPARAMLIST:
+            astUncompile(node->son[0], file);
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_TAILPARAMLIST: 
+            fprintf(file, ", ");
+            astUncompile(node->son[0], file);
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_HEADPARAMLIST:
+            astUncompile(node->son[0], file);
+            fprintf(file, " %s ", node->symbol->text);
+            break;
+        case T_AST_CMDBLOCK:
+            fprintf(file, "{ ");
+            astUncompile(node->son[0], file);            
+            fprintf(file, " }");
+            break;
+        case T_AST_CMDLIST: 
+            astUncompile(node->son[0], file);            
+            fprintf(file, ";\n");
+            astUncompile(node->son[1], file);            
+            break;
+        case T_AST_CMDATTR: 
+            astUncompile(node->son[0], file);            
+            break;
+        case T_AST_CMDFLOW: 
+            astUncompile(node->son[0], file);            
+            break;
+        case T_AST_CMDREAD: 
+            astUncompile(node->son[0], file);            
+            break;
+        case T_AST_CMDPRINT:
+            astUncompile(node->son[0], file);            
+            break;
+        case T_AST_CMDRETURN:
+            astUncompile(node->son[0], file);            
+            break;
+        case T_AST_CMDCMBLOCK: 
+            astUncompile(node->son[0], file);            
+            break;
+        case T_AST_PRINT:
+            fprintf(file, "print ");
+            astUncompile(node->son[0], file);            
+            astUncompile(node->son[1], file);            
+            break;
+        case T_AST_TAILPRINTLIST:
+            fprintf(file, ", ");
+            astUncompile(node->son[0], file);            
+            astUncompile(node->son[1], file);            
+            break;
+        case T_AST_HEADPRINTLIST: 
+            fprintf(file, "%s", node->symbol->text);
+            break;
+        case T_AST_EXPRHEADPRINTLIST:
+            astUncompile(node->son[0], file);            
+            break;
+        case T_AST_EXPARR: 
+            fprintf(file, "%s [", node->symbol->text);
+            astUncompile(node->son[0], file);            
+            fprintf(file, "]");
+            break;
+        case T_AST_CHAR:   
+            fprintf(file, "%s", node->symbol->text);
+            break;
+        case T_AST_CLOSEDEXP:
+            fprintf(file, "(");
+            astUncompile(node->son[0], file);
+            fprintf(file, ")");
+            break;
+        case T_AST_ADD: 
+            astUncompile(node->son[0], file);
+            fprintf(file, " + ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_SUB:
+            astUncompile(node->son[0], file);
+            fprintf(file, " - ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_MULT: 
+            astUncompile(node->son[0], file);
+            fprintf(file, " * ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_DIV: 
+            astUncompile(node->son[0], file);
+            fprintf(file, " / ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_LESS: 
+            astUncompile(node->son[0], file);
+            fprintf(file, " < ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_GREATER: 
+            astUncompile(node->son[0], file);
+            fprintf(file, " > ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_PIPE: 
+            astUncompile(node->son[0], file);
+            fprintf(file, " | ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_ADDRESS: 
+            astUncompile(node->son[0], file);
+            fprintf(file, " & ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_NOT:
+            fprintf(file, "~");  
+            astUncompile(node->son[0], file);
+            break;
+        case T_AST_DOL: 
+            fprintf(file, "$");  
+            astUncompile(node->son[0], file);
+            break;
+        case T_AST_HASHTAG: 
+            fprintf(file, "#");  
+            astUncompile(node->son[0], file);
+            break;
+        case T_AST_LE: 
+            astUncompile(node->son[0], file);
+            fprintf(file, " <= ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_GE: 
+            astUncompile(node->son[0], file);
+            fprintf(file, " >= ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_EQ: 
+            astUncompile(node->son[0], file);
+            fprintf(file, " == ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_DIF: 
+            astUncompile(node->son[0], file);
+            fprintf(file, " != ");
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_FUNCTIONCALLER:
+            fprintf(file, "%s (", node->symbol->text);
+            astUncompile(node->son[0], file);
+            fprintf(file, ")");
+            break;
+        case T_AST_ARGLIST:
+            astUncompile(node->son[0], file);
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_TAILARGLIST:
+            fprintf(file, ", ");
+            astUncompile(node->son[0], file);
+            astUncompile(node->son[1], file);
+            break;
+        case T_AST_KWCHAR: 
+            fprintf(file, "char ");
+            break;
+        case T_AST_KWINT: 
+            fprintf(file, "int ");
+            break;
+        case T_AST_KWBOOL: 
+            fprintf(file, "bool ");
+            break;
+        case T_AST_KWPOINTER:
+            fprintf(file, "pointer ");
+            break;
+        case T_AST_FUNC: 
+            astUncompile(node->son[0], file);
+            fprintf(file, "%s (", node->symbol->text);
+            astUncompile(node->son[1], file);
+            fprintf(file, ") ");
+            astUncompile(node->son[2], file);
+            break;
+        default: fprintf(stderr, "UNKNOWN"); break;
     }
 }

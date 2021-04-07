@@ -1,4 +1,4 @@
-int v: 0;
+bool v : false ;
 int incn (int x , int n )
   {
   return x+n;

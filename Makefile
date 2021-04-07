@@ -17,17 +17,19 @@ y.tab.c: parser.y
 	yacc parser.y -d
 
 clean:
-	rm -rf lex.yy.c etapa3 etapa3.tgz y.tab.c y.tab.h
+	rm -rf lex.yy.c etapa3 etapa3.tgz y.tab.c y.tab.h output.txt outputreal.txt
 
 test: y.tab.c lex.yy.c
 	gcc -o etapa3 lex.yy.c
 	chmod +x etapa3
-	./etapa3 test.txt
+	./etapa3 test.txt output.txt
+	./etapa3 output.txt outputreal.txt
 
 finalTest: y.tab.c lex.yy.c
 	gcc -o etapa3 lex.yy.c
 	chmod +x etapa3
-	./etapa3 sample.txt
+	./etapa3 sample.txt output.txt
+	
 
 compress: clean
-	tar cvzf etapa3.tgz hash.c hash.h main.c Makefile scanner.l parser.y
+	tar cvzf etapa3.tgz hash.c hash.h main.c Makefile scanner.l parser.y ast.c ast.h

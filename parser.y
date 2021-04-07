@@ -1,6 +1,8 @@
 %{
 int yylex();
 int yyerror();
+
+AST_NODE *ast;
 %}
 
 %union {
@@ -31,7 +33,7 @@ int yyerror();
 
 %token<symbol> LIT_INTEGER
 %token<symbol> LIT_TRUE
-%token<symbol> LIT_FALSE 
+%token<symbol> LIT_FALSE
 %token<symbol> LIT_CHAR
 %token<symbol> LIT_STRING
 
@@ -72,7 +74,7 @@ int yyerror();
 
 %%
 
-program: decList                                                    {astPrint($1, 0);}                               
+program: decList                                                    {ast =$1; astPrint($1, 0);}                               
     ;
 
 decList: dec ';' decList                                            {$$ = astCreate(T_AST_DEC, 0, $1, $3, 0, 0);}
@@ -88,8 +90,8 @@ decGlobalVariable: type TK_IDENTIFIER ':' literal                   {$$ = astCre
     | decGlobalVector                                               {$$ = astCreate(T_AST_DECGLOBALVEC, 0, $1, 0, 0, 0);}
     ;
 
-decGlobalVector: type '[' LIT_INTEGER ']' TK_IDENTIFIER             {$$ = astCreate(T_AST_DECVEC, $5, $1, 0, 0, 0);}
-    | type  '[' LIT_INTEGER ']' TK_IDENTIFIER ':' vectorValueList   {$$ = astCreate(T_AST_DECGLOBALVECWITHVALUE, 0, $1, $7, 0, 0);}
+decGlobalVector: type '[' LIT_INTEGER ']' TK_IDENTIFIER             {$$ = astCreate(T_AST_DECVEC, $5, $1, astCreate(T_AST_SYMBOL, $3, 0, 0, 0, 0), 0, 0);}
+    | type  '[' LIT_INTEGER ']' TK_IDENTIFIER ':' vectorValueList   {$$ = astCreate(T_AST_DECGLOBALVECWITHVALUE, $5, $1, $7, astCreate(T_AST_SYMBOL,$3, 0, 0, 0, 0), 0);}
     ;
 
 vectorValueList: literal vectorValueList                            {$$ = astCreate(T_AST_VECVALLIST, 0, $1, $2, 0, 0);}
@@ -165,7 +167,7 @@ expr: TK_IDENTIFIER                                                 {$$ = astCre
     | LIT_CHAR                                                      {$$ = astCreate(T_AST_SYMBOL, $1, 0, 0, 0, 0);}
     | LIT_TRUE                                                      {$$ = astCreate(T_AST_SYMBOL, $1, 0, 0, 0, 0);}
     | LIT_FALSE                                                     {$$ = astCreate(T_AST_SYMBOL, $1, 0, 0, 0, 0);}
-    | LIT_INTEGER                                                   {$$ = astCreate(T_AST_CHAR, $1, 0, 0, 0, 0);}
+    | LIT_INTEGER                                                   {$$ = astCreate(T_AST_SYMBOL, $1, 0, 0, 0, 0);}
     | '(' expr ')'                                                  {$$ = astCreate(T_AST_CLOSEDEXP, 0, $2, 0, 0, 0);}
     | expr '+' expr                                                 {$$ = astCreate(T_AST_ADD, 0, $1, $3, 0, 0);}
     | expr '-' expr                                                 {$$ = astCreate(T_AST_SUB, 0, $1, $3, 0, 0);}
@@ -204,3 +206,7 @@ int yyerror() {
     printf("Syntax error at line %d.\n", getLineNumber());
     exit(3);
 }
+
+AST_NODE* getAST() {
+    return ast;
+} 

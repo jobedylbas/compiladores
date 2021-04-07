@@ -66,6 +66,7 @@
 #define T_AST_KWBOOL 58
 #define T_AST_KWPOINTER 59
 #define T_AST_FUNC 60
+
 typedef struct ast_struct {
     int type;
     HASH_NODE *symbol;
@@ -74,5 +75,6 @@ typedef struct ast_struct {
 
 AST_NODE *astCreate(int type, HASH_NODE *symbol, AST_NODE *son0, AST_NODE *son1, AST_NODE *son2, AST_NODE *son3);
 void astPrint(AST_NODE *node, int level);
+void astUncompile(AST_NODE *node, FILE *file);
 
 #endif
