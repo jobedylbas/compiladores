@@ -7,6 +7,7 @@
 
 typedef struct hash_node {
     int type;
+    int datatype;
     char *text;
     struct hash_node *next;
 } HASH_NODE;
@@ -16,5 +17,6 @@ int hashAddres(char *text);
 HASH_NODE *hashFind(char *text);
 HASH_NODE *hashInsert(char *text, int type);
 void hashPrint(void);
+int hash_check_undeclared();
 
 #endif

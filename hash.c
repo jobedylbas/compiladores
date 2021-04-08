@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "hash.h"
+#include "y.tab.h"
 
 HASH_NODE *Table[HASH_SIZE];
 
@@ -48,4 +49,18 @@ void hashPrint(void)
 	for(int i=0; i<HASH_SIZE; i++)
 		for(node=Table[i]; node; node = node->next)
 			printf("[Table %d] has %s\n", i, Table[i]->text);
+}
+
+int hash_check_undeclared(){
+    HASH_NODE *node;
+    int undeclared = 0;
+	for(int i=0; i<HASH_SIZE; i++)
+		for(node=Table[i]; node; node = node->next)
+            if(node->type == TK_IDENTIFIER)
+            {
+                fprintf(stderr, "SEMANTIC ERROR: identifier %s undeclared.\n", node->text);
+                ++undeclared;
+            }
+    
+    return undeclared;
 }

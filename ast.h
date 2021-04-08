@@ -67,6 +67,21 @@
 #define T_AST_KWPOINTER 59
 #define T_AST_FUNC 60
 
+#define SYMBOL_VAR    291
+#define SYMBOL_FUNC   292
+#define SYMBOL_VEC    293
+#define SYMBOL_PARAM  294
+
+#define SYMBOL_LIT_BOOL 295
+#define SYMBOL_LIT_INT 296
+#define SYMBOL_LIT_CHAR 297
+#define SYMBOL_LIT_STRING 298
+
+#define DATATYPE_INT  299
+#define DATATYPE_BOOL 300
+#define DATATYPE_STRING 301
+#define DATATYPE_CHAR 302
+
 typedef struct ast_struct {
     int type;
     HASH_NODE *symbol;

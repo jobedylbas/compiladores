@@ -1,6 +1,8 @@
 %{
 int yylex();
 int yyerror();
+#include "semantic.h"
+#include "y.tab.h"
 
 AST_NODE *ast;
 %}
@@ -74,7 +76,10 @@ AST_NODE *ast;
 
 %%
 
-program: decList                                                    {ast =$1; astPrint($1, 0);}                               
+program: decList                                                    {ast =$1; 
+                                                                    astPrint($1, 0);
+                                                                    check_and_set_declarations($1);
+                                                                    check_undeclared();}                               
     ;
 
 decList: dec ';' decList                                            {$$ = astCreate(T_AST_DEC, 0, $1, $3, 0, 0);}
