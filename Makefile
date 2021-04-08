@@ -29,7 +29,8 @@ finalTest: y.tab.c lex.yy.c
 	gcc -o etapa3 lex.yy.c
 	chmod +x etapa3
 	./etapa3 sample.txt output.txt
-	
+	./etapa3 output.txt outputreal.txt
+
 
 compress: clean
 	tar cvzf etapa3.tgz hash.c hash.h main.c Makefile scanner.l parser.y ast.c ast.h

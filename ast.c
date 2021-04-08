@@ -3,9 +3,6 @@
 void description(int type) {
     switch(type) {
         case T_AST_DEC: fprintf(stderr, "T_AST_DEC"); break;
-        case T_AST_DECVAL: fprintf(stderr, "T_AST_DECVAL");  break;
-        case T_AST_DECFUNC: fprintf(stderr, "T_AST_DECFUNC");  break;
-        case T_AST_DECCMD: fprintf(stderr, "T_AST_DECCMD");  break;
         case T_AST_DECGLOBALVAL: fprintf(stderr, "T_AST_DECGLOBALVAL");  break;
         case T_AST_DECGLOBALVEC: fprintf(stderr, "T_AST_DECGLOVALVEC");  break;
         case T_AST_DECVEC: fprintf(stderr, "T_AST_DECVEC");  break;
@@ -115,12 +112,6 @@ void astUncompile(AST_NODE *node, FILE *file) {
             astUncompile(node->son[0], file);
             fprintf(file, ";\n");
             astUncompile(node->son[1], file);
-            break;
-        case T_AST_DECVAL: 
-            break;
-        case T_AST_DECFUNC: 
-            break;
-        case T_AST_DECCMD: 
             break;
         case T_AST_DECGLOBALVAL:
             astUncompile(node->son[0], file);
