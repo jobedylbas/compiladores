@@ -10,9 +10,6 @@
 etapa3: y.tab.c lex.yy.c
 	gcc -o etapa3 lex.yy.c
 	chmod +x etapa3
-	./etapa3 source.txt eq1.txt
-	./etapa3 eq1.txt eq2.txt
-	diff eq1.txt eq2.txt
 
 lex.yy.c: scanner.l
 	lex scanner.l
