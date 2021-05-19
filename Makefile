@@ -10,9 +10,6 @@
 etapa4: y.tab.c lex.yy.c semantic
 	gcc -o etapa4 lex.yy.c semantic.o
 	chmod +x etapa4
-	./etapa4 source.txt eq1.txt
-	./etapa4 eq1.txt eq2.txt
-	diff eq1.txt eq2.txt
 
 lex.yy.c: scanner.l
 	lex scanner.l

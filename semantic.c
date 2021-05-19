@@ -77,6 +77,32 @@ void check_operands(AST_NODE *node) {
     case T_AST_MULT: 
     case T_AST_DIV:
         // Check all aritmetic operands
+        for(int operand = 0; operand < 2; operand++) {
+            if(node->son[operand]->type == T_AST_ADD ||
+            node->son[operand]->type == T_AST_SUB ||
+            node->son[operand]->type == T_AST_MULT ||
+            node->son[operand]->type == T_AST_DIV ||
+            (
+             node->son[operand]->type == T_AST_SYMBOL &&
+             node->son[operand]->symbol->type == SYMBOL_VAR &&
+             node->son[operand]->symbol->datatype != DATATYPE_BOOL
+            ) ||
+            (
+             node->son[operand]->type == T_AST_SYMBOL &&
+             node->son[operand]->symbol->type == SYMBOL_LIT_INT
+            ) ||
+            (
+             node->son[operand]->type == T_AST_SYMBOL &&
+             node->son[operand]->symbol->type == SYMBOL_LIT_INT 
+            )
+          ){
+          // tudo certo
+        } else {
+            fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+            semanticErrors++;
+            node->type = T_AST_ERROR;
+            }
+        }      
         break;
     case T_AST_LESS:
     case T_AST_GREATER:
@@ -85,12 +111,45 @@ void check_operands(AST_NODE *node) {
     case T_AST_EQ:
     case T_AST_DIF:
         // Check all above operands
-        break; 
+        for(int operand = 0; operand < 2; operand++) {
+            if(node->son[operand]->type != SYMBOL_LIT_INT &&
+                node->son[operand]->type != SYMBOL_LIT_BOOL) {
+                fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+                semanticErrors++;
+                node->type = T_AST_ERROR;
+            } else {
+                node->type = DATATYPE_BOOL;
+            }
+        }
+        break;
     case T_AST_PIPE:
         break; 
     case T_AST_ADDRESS:
         break; 
     case T_AST_NOT:
+        if (node->son[0]->type != T_AST_SYMBOL &&
+           node->son[0]->type != T_AST_EXPARR &&
+           node->son[0]->type != T_AST_CLOSEDEXP &&
+           node->son[0]->type != T_AST_ADD &&
+           node->son[0]->type != T_AST_SUB &&
+           node->son[0]->type != T_AST_MULT &&
+           node->son[0]->type != T_AST_DIV &&
+           node->son[0]->type != T_AST_LESS &&
+           node->son[0]->type != T_AST_GREATER &&
+           node->son[0]->type != T_AST_PIPE &&
+           node->son[0]->type != T_AST_ADDRESS &&
+           node->son[0]->type != T_AST_DOL &&
+           node->son[0]->type != T_AST_HASHTAG &&
+           node->son[0]->type != T_AST_LE &&
+           node->son[0]->type != T_AST_GE &&
+           node->son[0]->type != T_AST_EQ &&
+           node->son[0]->type != T_AST_DIF &&
+           node->son[0]->type != T_AST_FUNCTIONCALLER
+           ) {
+            fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+            semanticErrors++;
+            node->type = T_AST_ERROR;
+        }
         break;
     case T_AST_DOL:
         break;

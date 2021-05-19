@@ -66,6 +66,7 @@
 #define T_AST_KWBOOL 58
 #define T_AST_KWPOINTER 59
 #define T_AST_FUNC 60
+#define T_AST_ERROR 61
 
 #define SYMBOL_VAR    291
 #define SYMBOL_FUNC   292
